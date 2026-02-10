@@ -1,8 +1,10 @@
 package com.example.AlumniLinkedInProfile.controller;
 
 import com.example.AlumniLinkedInProfile.DTO.RequestDTO;
+import com.example.AlumniLinkedInProfile.DTO.ResponseDTO;
 import com.example.AlumniLinkedInProfile.entity.AlumniProfile;
 import com.example.AlumniLinkedInProfile.service.AlumniService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,17 +21,14 @@ public class AlumniController {
     public AlumniController(AlumniService alumniService) {
         this.alumniService = alumniService;
     }
-    @PostMapping("search")
-    ResponseEntity<List<AlumniProfile>> getAllAlumniProfiles(@RequestBody RequestDTO requestDTO) {
+    @PostMapping("/search")
+    public ResponseEntity<ResponseDTO<List<AlumniProfile>>> searchAlumni(
+            @Valid @RequestBody RequestDTO requestDTO
+    ) {
+        List<AlumniProfile> result =
+                alumniService.searchAll(requestDTO);
 
-        List<AlumniProfile> result =alumniService.searchAll(requestDTO);
-
-        if (result.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(result);
-
+        return ResponseEntity.ok(
+                new ResponseDTO<>("success", result));
     }
 }

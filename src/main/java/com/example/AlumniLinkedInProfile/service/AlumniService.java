@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface AlumniService {
     List<AlumniProfile> searchAll(RequestDTO requestDTO);
-    List<AlumniProfile> findAll();
 }
